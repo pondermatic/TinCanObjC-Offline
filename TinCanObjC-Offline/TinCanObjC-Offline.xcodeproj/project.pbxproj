@@ -530,7 +530,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/appledoc --project-name \"TinCanObjC-Offline\" --project-company \"Rustici Software\" --company-id \"com.rusticisoftware\" --output \"~/Desktop/TinCanObjC-Offline-Docs\" --logformat xcode --keep-undocumented-objects --keep-undocumented-members --keep-intermediate-files --no-repeat-first-par --no-warn-invalid-crossref --ignore include --ignore \"*.m\" --ignore \"TinCanObjC_OfflineTests.h\" --ignore \"TCOfflineDataManager.h\" --ignore \"TestSemaphor.h\" --index-desc \"docs.markdown\" ./TinCanObjC-Offline";
+			shellScript = "if [ -e /usr/local/bin/appledoc ]\nthen\n  /usr/local/bin/appledoc --project-name \"TinCanObjC-Offline\" --project-company \"Rustici Software\" --company-id \"com.rusticisoftware\" --output \"~/Desktop/TinCanObjC-Offline-Docs\" --logformat xcode --keep-undocumented-objects --keep-undocumented-members --keep-intermediate-files --no-repeat-first-par --no-warn-invalid-crossref --ignore include --ignore \"*.m\" --ignore \"TinCanObjC_OfflineTests.h\" --ignore \"TCOfflineDataManager.h\" --ignore \"TestSemaphor.h\" --index-desc \"docs.markdown\" ./TinCanObjC-Offline\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
