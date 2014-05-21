@@ -69,7 +69,7 @@
     
     
     // build the actor
-    TCAgent *actor = [[TCAgent alloc] initWithName:@"Joe User" withMbox:@"mailto:joe.user@tincanapi.com"];
+    TCAgent *actor = [[TCAgent alloc] initWithName:@"Joe User" withMbox:@"mailto:joe.user@tincanapi.com" withAccount:nil];
     
 
     // build the verb
@@ -127,14 +127,14 @@
 
     
    // add a statement to the queue
-   [ enqueueStatement:statementToSend withCompletionBlock:^{
+   [tincan enqueueStatement:statementToSend withCompletionBlock:^{
        NSLog(@"statement enqued");
    }withErrorBlock:^(NSError *error){
        NSLog(@"error : %@", [error userInfo]);
    }];
    //check to make sure there are some statements here
    NSArray *statementArray = [tincan getCachedStatements];
-   NSLog(@"[statementArray count] : %d",[statementArray count]);
+   NSLog(@"[statementArray count] : %lu",(unsigned long)[statementArray count]);
    STAssertNotNil(statementArray, @"statementArray should not be null");
    
    [tincan sendAllStatementsToServerWithCompletionBlock:^{
@@ -150,7 +150,7 @@
 
 - (TCStatement *)createTestStatementWithOptions:(NSDictionary *)options
 {
-    TCAgent *actor = [[TCAgent alloc] initWithName:@"Joe User" withMbox:@"mailto:joe.user@tincanapi.com"];
+    TCAgent *actor = [[TCAgent alloc] initWithName:@"Joe User" withMbox:@"mailto:joe.user@tincanapi.com" withAccount:nil];
     
     TCActivityDefinition *actDef = [[TCActivityDefinition alloc] initWithName:[[TCLocalizedValues alloc] initWithLanguageCode:@"en-US" withValue:@"http://tincanapi.com/test"]
                                                               withDescription:[[TCLocalizedValues alloc] initWithLanguageCode:@"en-US" withValue:@"Description for test statement"]
@@ -178,7 +178,7 @@
 
 - (void) testOfflineState
 {
-   TCAgent *actor = [[TCAgent alloc] initWithName:@"Joe User" withMbox:@"mailto:joe.user@tincanapi.com"];
+   TCAgent *actor = [[TCAgent alloc] initWithName:@"Joe User" withMbox:@"mailto:joe.user@tincanapi.com" withAccount:nil];
    
    NSMutableDictionary *stateContents = [[NSMutableDictionary alloc] init];
    [stateContents setValue:@"page 1" forKey:@"bookmark"];
@@ -214,7 +214,7 @@
 
 - (void) testGetLocalState
 {
-   TCAgent *actor = [[TCAgent alloc] initWithName:@"Joe User" withMbox:@"mailto:joe.user@tincanapi.com"];
+   TCAgent *actor = [[TCAgent alloc] initWithName:@"Joe User" withMbox:@"mailto:joe.user@tincanapi.com" withAccount:nil];
    
    NSMutableDictionary *stateContents = [[NSMutableDictionary alloc] init];
    [stateContents setValue:@"page 1" forKey:@"bookmark"];
