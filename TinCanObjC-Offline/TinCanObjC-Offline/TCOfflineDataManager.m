@@ -30,6 +30,7 @@ NSString * const TCOfflineDataManagerDidSaveFailedNotification = @"DataManagerDi
 
 @end
 
+
 @implementation TCOfflineDataManager
 
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
@@ -67,10 +68,10 @@ NSString * const kTCOfflineDataManagerSQLiteName = @"TinCanObjC-LocalStorage.sql
 	NSLog(@"mainBundlePath %@", mainBundlePath);
 	NSString* frameworkBundlePath;
 	
-	if([[mainBundlePath lastPathComponent] isEqualToString:@"TinCanObjC-OfflineTests.octest"])
+	if ([[mainBundlePath lastPathComponent] isEqualToString:@"TinCanObjC-OfflineTests.octest"])
 	{
 		frameworkBundlePath = mainBundlePath;
-	}else{
+	} else {
 		frameworkBundlePath = [mainBundlePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.bundle",kTCOfflineDataManagerBundleName]];
 	}
 	

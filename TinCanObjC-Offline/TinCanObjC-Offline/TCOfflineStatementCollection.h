@@ -30,43 +30,40 @@
 @interface TCOfflineStatementCollection : NSObject
 
 /**
- 
  @method init
- 
  */
-- (id) init;
+- (id)init;
 
 /**
- 
  @method addStatement
  @param statement The TCStatement to add to the collection
  @param completionBlock The code block to execute on completion
  @param errorBlock The code block to execute on error
  */
-- (void) addStatement:(TCStatement *)statement withCompletionBlock:(void(^)())completionBlock withErrorBlock:(void(^)(NSError *))errorBlock;
+- (void)addStatement:(TCStatement *)statement withCompletionBlock:(void(^)())completionBlock withErrorBlock:(void(^)(NSError *))errorBlock;
+
 /**
- 
  @method JSONString
- @returns jsonString NSString containing the JSON representation of this collection
+ @return jsonString NSString containing the JSON representation of this collection
  */
 - (NSString *)JSONString;
+
 /**
- 
  @method getCachedStatements
- @returns cachedStatements NSArray containing the OfflineStatement objects cached
+ @return cachedStatements NSArray containing the OfflineStatement objects cached
  */
-- (NSArray *) getCachedStatements;
+- (NSArray *)getCachedStatements;
+
 /**
- 
  @method getUnsentStatements
  @param limit The limit of unsent statements to get
  */
--(NSArray *) getUnsentStatements:(int)limit;
+- (NSArray *)getUnsentStatements:(int)limit;
+
 /**
- 
  @method markStatementPosted
  @param statementPosted The TCStatement that was posted
  */
-- (void) markStatementPosted:(TCStatement *)statementPosted;
+- (void)markStatementPosted:(TCStatement *)statementPosted;
 
 @end

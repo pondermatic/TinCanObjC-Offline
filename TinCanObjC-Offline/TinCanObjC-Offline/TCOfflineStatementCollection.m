@@ -27,19 +27,18 @@
 
 @property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
 
-
-
 @end
+
 
 @implementation TCOfflineStatementCollection
 
-- (id) init
+- (id)init
 {
 	_statementArray = [[NSMutableArray alloc] init];
 	return self;
 }
 
-- (void) addStatement:(TCStatement *)statement withCompletionBlock:(void(^)())completionBlock withErrorBlock:(void(^)(NSError *))errorBlock
+- (void)addStatement:(TCStatement *)statement withCompletionBlock:(void(^)())completionBlock withErrorBlock:(void(^)(NSError *))errorBlock
 {
 	[_statementArray addObject:[statement dictionary]];
 	_managedObjectContext = [TCOfflineDataManager sharedInstance].mainObjectContext;
@@ -56,7 +55,7 @@
 	if (![_managedObjectContext save:&error]) {
 		NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
 		errorBlock(error);
-	}else{
+	} else {
 		NSLog(@"statement added to localstorage");
 		completionBlock();
 	}
@@ -74,7 +73,7 @@
 	return jsonString;
 }
 
--(NSArray *) getCachedStatements
+- (NSArray *)getCachedStatements
 {
 	NSLog(@"getting statement list");
 	_managedObjectContext = [TCOfflineDataManager sharedInstance].mainObjectContext;
@@ -99,7 +98,7 @@
 	return fetchResults;
 }
 
--(NSArray *) getUnsentStatements:(int)limit
+- (NSArray *)getUnsentStatements:(int)limit
 {
 	NSLog(@"getting statement list");
 	_managedObjectContext = [TCOfflineDataManager sharedInstance].mainObjectContext;
@@ -142,7 +141,7 @@
 //			NSLog(@"statement posted... deleting");
 //			[statementQueue markStatementPosted:statementToSend];
 //			
-//		}withErrorBlock:^(NSError *error)
+//		} withErrorBlock:^(NSError *error)
 //		{
 //			NSLog(@"error sendAllStatementsToServerWithCompletionBlock : %@",[error userInfo]);
 //			dispatch_async(dispatch_get_main_queue(), ^{
@@ -155,7 +154,7 @@
 //	});
 //}
 
-- (void) markStatementPosted:(TCStatement *)statementPosted
+- (void)markStatementPosted:(TCStatement *)statementPosted
 {
 	NSLog(@"deleting statementId %@", statementPosted.statementId);
 	//update statement row with postedDate

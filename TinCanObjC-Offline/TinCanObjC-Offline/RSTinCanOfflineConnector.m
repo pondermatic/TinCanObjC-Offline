@@ -26,12 +26,15 @@
 	NSMutableArray *_recordStore;
 	NSMutableArray *_stateToDelete;
 }
+
 @property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
+
 @end
+
 
 @implementation RSTinCanOfflineConnector
 
-- (id) initWithOptions:(NSDictionary *)options
+- (id)initWithOptions:(NSDictionary *)options
 {
 	if ((self = [super init])) {
 		_recordStore = [options valueForKey:@"recordStore"];
@@ -41,80 +44,77 @@
 	return self;
 }
 
-
-- (void) sendStatementToServer:(TCStatement *)statementToSend withCompletionBlock:(void (^)())completionBlock withErrorBlock:(void(^)(TCError *))errorBlock
+- (void)sendStatementToServer:(TCStatement *)statementToSend withCompletionBlock:(void (^)())completionBlock withErrorBlock:(void(^)(TCError *))errorBlock
 {
 	TCLRS *lrs = [[TCLRS alloc] initWithOptions:[_recordStore objectAtIndex:0]];
 	
 	[lrs saveStatement:statementToSend withOptions:nil
-   withCompletionBlock:^(){
+   withCompletionBlock:^() {
 //	   dispatch_async(dispatch_get_main_queue(), ^{
 		   NSLog(@"statement sent");
 		   completionBlock();
 //	   });
    }
-		withErrorBlock:^(TCError *error){
+		withErrorBlock:^(TCError *error) {
 //			dispatch_async(dispatch_get_main_queue(), ^{
 				errorBlock(error);
 //			});
 		}];
 }
 
-
-- (void) getStatementWithId:(NSString *)statementId withOptions:(NSDictionary *)options withCompletionBlock:(void(^)(TCStatement *))completionBlock withErrorBlock:(void(^)(TCError *))errorBlock
+- (void)getStatementWithId:(NSString *)statementId withOptions:(NSDictionary *)options withCompletionBlock:(void(^)(TCStatement *))completionBlock withErrorBlock:(void(^)(TCError *))errorBlock
 {
 	
 	TCLRS *lrs = [[TCLRS alloc] initWithOptions:[_recordStore objectAtIndex:0]];
 	
 	[lrs retrieveStatementWithId:statementId withOptions:options
-			 withCompletionBlock:^(TCStatement *statement){
+			 withCompletionBlock:^(TCStatement *statement) {
 				 dispatch_async(dispatch_get_main_queue(), ^{
 					 completionBlock(statement);
 				 });
 			 }
-				  withErrorBlock:^(TCError *error){
+				  withErrorBlock:^(TCError *error) {
 					  dispatch_async(dispatch_get_main_queue(), ^{
 						  errorBlock(error);
 					  });
 				  }];
 }
 
-
-- (void) sendStatementsToServer:(TCStatementCollection *)statementArray withCompletionBlock:(void(^)())completionBlock withErrorBlock:(void(^)(TCError *))errorBlock
+- (void)sendStatementsToServer:(TCStatementCollection *)statementArray withCompletionBlock:(void(^)())completionBlock withErrorBlock:(void(^)(TCError *))errorBlock
 {
 	TCLRS *lrs = [[TCLRS alloc] initWithOptions:[_recordStore objectAtIndex:0]];
 	
 	[lrs saveStatements:statementArray withOptions:nil
-	withCompletionBlock:^(){
+	withCompletionBlock:^() {
 		dispatch_async(dispatch_get_main_queue(), ^{
 			completionBlock();
 		});
 	}
-		 withErrorBlock:^(TCError *error){
+		 withErrorBlock:^(TCError *error) {
 			 dispatch_async(dispatch_get_main_queue(), ^{
 				 errorBlock(error);
 			 });
 		 }];
 }
 
-- (void) getStatementsFromServerWithOptions:(TCQueryOptions *)options withCompletionBlock:(void(^)(NSArray *))completionBlock withErrorBlock:(void(^)(TCError *))errorBlock
+- (void)getStatementsFromServerWithOptions:(TCQueryOptions *)options withCompletionBlock:(void(^)(NSArray *))completionBlock withErrorBlock:(void(^)(TCError *))errorBlock
 {
 	TCLRS *lrs = [[TCLRS alloc] initWithOptions:[_recordStore objectAtIndex:0]];
 	
 	[lrs queryStatementsWithOptions:options
-				withCompletionBlock:^(NSArray *statementArray){
+				withCompletionBlock:^(NSArray *statementArray) {
 					dispatch_async(dispatch_get_main_queue(), ^{
 						completionBlock(statementArray);
 					});
 				}
-					 withErrorBlock:^(TCError *error){
+					 withErrorBlock:^(TCError *error) {
 						 dispatch_async(dispatch_get_main_queue(), ^{
 							 errorBlock(error);
 						 });
 					 }];
 }
 
-- (void) getStateFromServerWithStateId:(NSString *)stateId withActivityId:(NSString *)activityId withAgent:(TCAgent *)agent withRegistration:(NSString *)registration withOptions:(NSDictionary *)options withCompletionBlock:(void(^)(NSDictionary *))completionBlock withErrorBlock:(void(^)(TCError *))errorBlock
+- (void)getStateFromServerWithStateId:(NSString *)stateId withActivityId:(NSString *)activityId withAgent:(TCAgent *)agent withRegistration:(NSString *)registration withOptions:(NSDictionary *)options withCompletionBlock:(void(^)(NSDictionary *))completionBlock withErrorBlock:(void(^)(TCError *))errorBlock
 {
 	TCLRS *lrs = [[TCLRS alloc] initWithOptions:[_recordStore objectAtIndex:0]];
 	
@@ -125,14 +125,14 @@
 			completionBlock(state);
 		});
 	}
-				   withErrorBlock:^(TCError *error){
+				   withErrorBlock:^(TCError *error) {
 					   dispatch_async(dispatch_get_main_queue(), ^{
 						   errorBlock(error);
 					   });
 				   }];
 }
 
-- (void) getLocalStateForStateId:(NSString *)stateId withCompletionBlock:(void(^)(NSDictionary *))completionBlock
+- (void)getLocalStateForStateId:(NSString *)stateId withCompletionBlock:(void(^)(NSDictionary *))completionBlock
 {
 	_managedObjectContext = [TCOfflineDataManager sharedInstance].mainObjectContext;
 	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -153,8 +153,7 @@
 	completionBlock(result);
 }
 
-
-- (void) setStateWithValue:(NSDictionary *)value withStateId:(NSString *)stateId withActivityId:(NSString *)activityId withAgent:(TCAgent *)agent withRegistration:(NSString *)registration withOptions:(NSDictionary *)options withCompletionBlock:(void(^)())completionBlock withErrorBlock:(void(^)(TCError *))errorBlock
+- (void)setStateWithValue:(NSDictionary *)value withStateId:(NSString *)stateId withActivityId:(NSString *)activityId withAgent:(TCAgent *)agent withRegistration:(NSString *)registration withOptions:(NSDictionary *)options withCompletionBlock:(void(^)())completionBlock withErrorBlock:(void(^)(TCError *))errorBlock
 {
 	_managedObjectContext = [TCOfflineDataManager sharedInstance].mainObjectContext;
 	
@@ -175,18 +174,18 @@
 	if (![_managedObjectContext save:&error]) {
 		NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
 		errorBlock((TCError *)error);
-	}else{
+	} else {
 		NSLog(@"statement added to localstorage");
 		completionBlock();
 	}
 }
 
-- (void) deleteStateWithStateId:(NSString *)stateId withActivityId:(NSString *)activityId withAgent:(TCAgent *)agent withRegistration:(NSString *)registration withOptions:(NSDictionary *)options withCompletionBlock:(void(^)())completionBlock withErrorBlock:(void(^)(TCError *))errorBlock
+- (void)deleteStateWithStateId:(NSString *)stateId withActivityId:(NSString *)activityId withAgent:(TCAgent *)agent withRegistration:(NSString *)registration withOptions:(NSDictionary *)options withCompletionBlock:(void(^)())completionBlock withErrorBlock:(void(^)(TCError *))errorBlock
 {
 	
 }
 
-- (void) enqueueStatement:(TCStatement *)statement withCompletionBlock:(void(^)())completionBlock withErrorBlock:(void(^)(NSError *))errorBlock
+- (void)enqueueStatement:(TCStatement *)statement withCompletionBlock:(void(^)())completionBlock withErrorBlock:(void(^)(NSError *))errorBlock
 {
 	NSLog(@"enquing Statement %@", [statement JSONString]);
 	TCOfflineStatementCollection *statementQueue = [[TCOfflineStatementCollection alloc] init];
@@ -194,29 +193,30 @@
 	[statementQueue addStatement:statement withCompletionBlock:completionBlock withErrorBlock:errorBlock];
 }
 
-- (NSArray *) getCachedStatements
+- (NSArray *)getCachedStatements
 {
 	TCOfflineStatementCollection *statementQueue = [[TCOfflineStatementCollection alloc] init];
 	return [statementQueue getCachedStatements];
 }
 
-- (void) sendOldestStatementFromQueueWithCompletionBlock:(void(^)())completionBlock
+- (void)sendOldestStatementFromQueueWithCompletionBlock:(void(^)())completionBlock
 {
 	TCOfflineStatementCollection *statementQueue = [[TCOfflineStatementCollection alloc] init];
 	NSArray *unsentStatements = [statementQueue getUnsentStatements:1];
 	//NSLog(@"statement json %@", [[unsentStatements objectAtIndex:0] statementJson]);
 	TCStatement *statementToSend = [[TCStatement alloc] initWithJSON:[[unsentStatements objectAtIndex:0] statementJson]];
 	NSLog(@"parsed statement %@", [statementToSend JSONString]);
-	[self sendStatementToServer:statementToSend withCompletionBlock:^{
-		[statementQueue markStatementPosted:statementToSend];
-		completionBlock();
-	}withErrorBlock:^(NSError *error)
-	{
-		NSLog(@"error sendOldestFromQueueWithCompletionBlock : %@",[error userInfo]);
-	}];
+	[self sendStatementToServer:statementToSend
+			withCompletionBlock:^{
+				[statementQueue markStatementPosted:statementToSend];
+				completionBlock();
+			}
+				 withErrorBlock:^(NSError *error) {
+					 NSLog(@"error sendOldestFromQueueWithCompletionBlock : %@",[error userInfo]);
+				 }];
 }
 
-- (void) sendAllStatementsToServerWithCompletionBlock:(void(^)())completionBlock withErrorBlock:(void (^)(NSError *))errorBlock
+- (void)sendAllStatementsToServerWithCompletionBlock:(void(^)())completionBlock withErrorBlock:(void (^)(NSError *))errorBlock
 {
 	TCOfflineStatementCollection *statementQueue = [[TCOfflineStatementCollection alloc] init];
 	NSArray *unsentStatements = [statementQueue getUnsentStatements:500];
@@ -230,28 +230,26 @@
 		
 		[statementCollectionToSend addStatement:statementToSend];
 		[statementsToDelete addObject:statementToSend];
-		
 	}
 	
-	[self sendStatementsToServer:statementCollectionToSend withCompletionBlock:^{
-		NSLog(@"statement batch sent");
-		for (TCStatement *statementSent in statementsToDelete) {
-			[statementQueue markStatementPosted:statementSent];
-		}
-		dispatch_async(dispatch_get_main_queue(), ^{
-			completionBlock();
-		});
-	}withErrorBlock:^(TCError *error){
-		dispatch_async(dispatch_get_main_queue(), ^{
-			errorBlock(error);
-		});
-	}];
-	
-	
-	
+	[self sendStatementsToServer:statementCollectionToSend
+			 withCompletionBlock:^{
+				 NSLog(@"statement batch sent");
+				 for (TCStatement *statementSent in statementsToDelete) {
+					 [statementQueue markStatementPosted:statementSent];
+				 }
+				 dispatch_async(dispatch_get_main_queue(), ^{
+					 completionBlock();
+				 });
+			 }
+				  withErrorBlock:^(TCError *error) {
+					  dispatch_async(dispatch_get_main_queue(), ^{
+						  errorBlock(error);
+					  });
+				  }];
 }
 
-- (void) sendLocalStateToServerWithCompletionBlock:(void(^)())completionBlock withErrorBlock:(void(^)(NSError *))errorBlock
+- (void)sendLocalStateToServerWithCompletionBlock:(void(^)())completionBlock withErrorBlock:(void(^)(NSError *))errorBlock
 {
 	// get the most recent distinct rows and send them
 	_managedObjectContext = [TCOfflineDataManager sharedInstance].mainObjectContext;
@@ -269,11 +267,11 @@
 	
 	_stateToDelete = [[NSMutableArray alloc] init];
 	
-	if(error){
+	if (error) {
 		NSLog(@"error - %@", error);
 		errorBlock(error);
-	}else{
-		[fetchResults enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop){
+	} else {
+		[fetchResults enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 			
 			__block LocalState *stateFromDb = (LocalState *)obj;
 			TCLRS *lrs = [[TCLRS alloc] initWithOptions:[_recordStore objectAtIndex:0]];
@@ -283,13 +281,13 @@
 			
 			if (error) {
 				errorBlock(error);
-			}else{
+			} else {
 				[_stateToDelete addObject:stateFromDb];
 				
-				[lrs saveStateWithValue:stateDocument withStateId:stateFromDb.stateId withActivityId:stateFromDb.activityId withAgent:[[TCAgent alloc] initWithJSON:stateFromDb.agentJson] withRegistration:nil withLastSHA1:nil withOptions:nil withCompletionBlock:^(){
+				[lrs saveStateWithValue:stateDocument withStateId:stateFromDb.stateId withActivityId:stateFromDb.activityId withAgent:[[TCAgent alloc] initWithJSON:stateFromDb.agentJson] withRegistration:nil withLastSHA1:nil withOptions:nil withCompletionBlock:^() {
 					
 				}
-						 withErrorBlock:^(TCError *error){
+						 withErrorBlock:^(TCError *error) {
 							 dispatch_async(dispatch_get_main_queue(), ^{
 								 errorBlock(error);
 							 });
@@ -307,7 +305,6 @@
 
 - (void)deleteSendStateRowsWithCompletionBlock:(void(^)())completionBlock
 {
-	
 	NSError *error;
 	
 	for (LocalState *stateRow in _stateToDelete) {
@@ -317,7 +314,7 @@
 	if (![_managedObjectContext save:&error]) {
 		NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
 		completionBlock();
-	}else{
+	} else {
 		[_stateToDelete removeAllObjects];
 		completionBlock();
 	}

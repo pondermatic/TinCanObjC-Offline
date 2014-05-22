@@ -74,9 +74,9 @@
     NSLog(@"statementToSend JSON - %@", [statementToSend JSONString]);
 	
 	// add a statement to the queue
-	[ enqueueStatement:statementToSend withCompletionBlock:^{
+	[tincan enqueueStatement:statementToSend withCompletionBlock:^{
        NSLog(@"statement enqued");
-	}withErrorBlock:^(NSError *error){
+	} withErrorBlock:^(NSError *error){
        NSLog(@"error : %@", [error userInfo]);
 	}];
 	//check to make sure there are some statements here
@@ -87,7 +87,7 @@
 	[tincan sendAllStatementsToServerWithCompletionBlock:^{
        NSLog(@"statements flushed");
        [[TestSemaphor sharedInstance] lift:@"flushStatements"];
-	}withErrorBlock:^(NSError *error){
+	} withErrorBlock:^(NSError *error){
        STFail(@"error : %@", [error userInfo]);
        [[TestSemaphor sharedInstance] lift:@"flushStatements"];
 	}];
