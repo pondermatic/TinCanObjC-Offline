@@ -19,10 +19,10 @@
 //  limitations under the License.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 #import "RSTinCanOfflineConnector.h"
 #import "TestSemaphor.h"
 
-@interface TinCanObjC_OfflineTests : SenTestCase
+@interface TinCanObjC_OfflineTests : XCTestCase
 
 @end

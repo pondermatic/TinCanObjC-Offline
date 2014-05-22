@@ -135,13 +135,13 @@
 	//check to make sure there are some statements here
 	NSArray *statementArray = [tincan getCachedStatements];
 	NSLog(@"[statementArray count] : %lu",(unsigned long)[statementArray count]);
-	STAssertNotNil(statementArray, @"statementArray should not be null");
+	XCTAssertNotNil(statementArray, @"statementArray should not be null");
 	
 	[tincan sendAllStatementsToServerWithCompletionBlock:^{
 		NSLog(@"statements flushed");
 		[[TestSemaphor sharedInstance] lift:@"flushStatements"];
 	}withErrorBlock:^(NSError *error){
-		STFail(@"error : %@", [error userInfo]);
+		XCTFail(@"error : %@", [error userInfo]);
 		[[TestSemaphor sharedInstance] lift:@"flushStatements"];
 	}];
 	
