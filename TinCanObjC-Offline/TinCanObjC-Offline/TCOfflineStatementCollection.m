@@ -34,7 +34,9 @@
 
 - (id)init
 {
-	_statementArray = [[NSMutableArray alloc] init];
+	if (self = [super init]) {
+		_statementArray = [[NSMutableArray alloc] init];
+	}
 	return self;
 }
 
