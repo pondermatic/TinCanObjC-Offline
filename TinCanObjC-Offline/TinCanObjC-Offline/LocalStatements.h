@@ -31,9 +31,9 @@
 /** JSON string from the TCStatement object */
 @property (nonatomic, retain) NSString * statementJson;
 /** timestamp of database insert */
-@property (nonatomic) NSDate * createDate;
+@property (nonatomic, retain) NSDate * createDate;
 /** timestamp of LRS post (in case delete does not happen) */
-@property (nonatomic) NSDate * postedDate;
+@property (nonatomic, retain) NSDate * postedDate;
 /** querystring to use for the statement POST/PUT */
 @property (nonatomic, retain) NSString * querystring;
 
