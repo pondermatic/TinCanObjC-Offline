@@ -68,11 +68,10 @@ NSString * const kTCOfflineDataManagerSQLiteName = @"TinCanObjC-LocalStorage.sql
 	NSLog(@"mainBundlePath %@", mainBundlePath);
 	NSString* frameworkBundlePath;
 	
-	if ([[mainBundlePath lastPathComponent] isEqualToString:@"TinCanObjC-OfflineTests.xctest"])
+	frameworkBundlePath = [mainBundlePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.bundle", kTCOfflineDataManagerBundleName]];
+	if ([[NSFileManager defaultManager] fileExistsAtPath:frameworkBundlePath] == NO)
 	{
 		frameworkBundlePath = mainBundlePath;
-	} else {
-		frameworkBundlePath = [mainBundlePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.bundle",kTCOfflineDataManagerBundleName]];
 	}
 	
 	NSLog(@"frameworkBundlePath %@", frameworkBundlePath);
